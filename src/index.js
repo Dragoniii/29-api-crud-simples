@@ -2,8 +2,7 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-const cars = [
-];
+const cars = [];
 
 app.get("/cars", (req, res) => {
   return res.json(cars);
@@ -38,16 +37,40 @@ app.post("/newcar", (req, res) => {
     brand: infoNewCar.brand,
     color: infoNewCar.color,
     year: infoNewCar.year,
-    price: infoNewCar.price 
-  }
+    price: infoNewCar.price,
+  };
 
-  cars.splice(id, 1, newCar);
-  return res.status(201).json(newCar)
-
+  cars.push(newCar);
+  return res.status(201).json(newCar);
 });
 
-//app.put
+app.put("/updatecar/:id", (req, res) => {
+  const infoUpdateCar = req.body;
+  const params = req.params;
 
-//app.delete
+  const carToUpdate = cars.findIndex((car) => car.id === Number(params.id));
+
+  const carUpdated = {
+    id: Number(params.id),
+    model: infoUpdateCar.model,
+    brand: infoUpdateCar.brand,
+    color: infoUpdateCar.color,
+    year: infoUpdateCar.year,
+    price: infoUpdateCar.price,
+  };
+
+  cars[carToUpdate] = carUpdated;
+  return res.status(201).json(carUpdated);
+});
+
+app.delete("/delete/:id", (req, res) => {
+  const params = req.params;
+
+  const carToDelete = cars.findIndex((car) => car.id === Number(params.id));
+
+  cars.splice(carToDelete, 1);
+
+  return res.status(201).json("Car deleted successfully");
+});
 
 app.listen(8080, () => console.log("Servidor iniciado"));
