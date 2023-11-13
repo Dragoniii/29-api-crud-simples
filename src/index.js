@@ -45,4 +45,9 @@ app.post("/newcar", (req, res) => {
   return res.status(201).json(newCar)
 
 });
+
+//app.put
+
+//app.delete
+
 app.listen(8080, () => console.log("Servidor iniciado"));
