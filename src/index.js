@@ -4,6 +4,17 @@ app.use(express.json());
 
 const cars = [];
 
+const verification = function (req, res, next) {
+  const body = req.body;
+  const carExist = cars.find((car) => car.model === body.model);
+
+  if (carExist) {
+    return res.status(401).json("This car alredy exist");
+  }
+
+  next();
+};
+
 app.get("/cars", (req, res) => {
   return res.json(cars);
 });
@@ -19,7 +30,7 @@ app.get("/cars/:id", (req, res) => {
   return res.status(200).json(car);
 });
 
-app.post("/newcar", (req, res) => {
+app.post("/newcar", verification, (req, res) => {
   const infoNewCar = req.body;
 
   let id = 0;
@@ -73,4 +84,4 @@ app.delete("/delete/:id", (req, res) => {
   return res.status(201).json("Car deleted successfully");
 });
 
-app.listen(8080, () => console.log("Servidor iniciado"));
+app.listen(8080, () => console.log("Servidor started"));
